@@ -18,6 +18,7 @@ function App() {
     useState<SafeEventEmitterProvider | null>(null);
   const [user, setUser] = useState<Partial<UserInfo> | null>(null);
   const [isInit, setIsInit] = useState<boolean>(false);
+  const [gaslessWallet, setGaslessWallet] = useState<GaslessWalletInterface | null>(null);
   const [wallet, setWallet] = useState<{
     address: string;
     balance: string;
@@ -50,12 +51,12 @@ function App() {
   const init = async () => {
     setIsLoading(true);
     try {
-      const smartWalletConfig: GaslessWalletConfig = { apiKey:"DD42Cz1XfB_51WMhE3cST_3BEPFLHe_6utg2ZJxvDXg_" };
+      const smartWalletConfig: GaslessWalletConfig = { apiKey: "DD42Cz1XfB_51WMhE3cST_3BEPFLHe_6utg2ZJxvDXg_" };
       const loginConfig: LoginConfig = {
         domains: [window.location.origin],
         chain: {
           id: 84531,
-          rpcUrl:"https://goerli.base.org",
+          rpcUrl: "https://goerli.base.org",
         },
         ui: {
           theme: "dark",
@@ -82,7 +83,7 @@ function App() {
   };
 
   const login = async () => {
-    if(!isInit){
+    if (!isInit) {
       init();
       setIsInit(true);
     }
@@ -103,6 +104,18 @@ function App() {
     setUser(null);
   };
 
+  const getGaslessWallet = async () => {
+    if (!gelatoLogin) {
+      return;
+    }
+    const _gasslessWallet: GaslessWalletInterface = gelatoLogin.getGaslessWallet();
+    console.log("initializing ...")
+    await _gasslessWallet.init();
+    console.log("initialized gasless wallet")
+    setGaslessWallet(_gasslessWallet);
+    console.log("GASLESSWALLET ADDRESS:" + _gasslessWallet.getAddress());
+    console.log("GASLESSWALLET INITIATED:" + _gasslessWallet.isInitiated());
+  }
   const loggedInView = isLoading ? (
     <p>loading...</p>
   ) : (
@@ -111,6 +124,8 @@ function App() {
       <p>{user?.email}</p>
       <p>{user?.profileImage}</p>
       <p>{user?.name}</p>
+      <button onClick={getGaslessWallet}>get gasless wallet</button>
+      <button onClick={async () => alert(await gaslessWallet!.isDeployed())}>is gasless wallet already deployed?</button>
     </div>
   );
 
@@ -118,11 +133,11 @@ function App() {
     <div>
       <h2>Gelato Onboarding Minimal</h2>
       <div>
-          <button
-            onClick={login}
-          >
-              Login
-          </button>
+        <button
+          onClick={login}
+        >
+          Login
+        </button>
       </div>
     </div>
   );
@@ -146,3 +161,5 @@ function App() {
 }
 
 export default App;
+
+// reference : https://www.gelato.network/blog/how-to-use-gelato-s-gasless-wallet-sdk#social-login
