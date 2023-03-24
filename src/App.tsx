@@ -1,33 +1,38 @@
 import { useEffect, useState } from "react";
 import { SafeEventEmitterProvider, UserInfo } from "@web3auth/base";
-// import "./App.css"; //import this for tailwind css
 import { ethers } from "ethers";
-import {
-  GaslessOnboarding,
-  GaslessWalletConfig,
-  GaslessWalletInterface,
-  LoginConfig,
-} from "@gelatonetwork/gasless-onboarding";
+import {GaslessOnboarding,GaslessWalletConfig,GaslessWalletInterface,LoginConfig,} from "@gelatonetwork/gasless-onboarding";
+// import "./App.css"; //import this for tailwind css
+
+const CONTRACT_ADDRESS:string="0xBf17E7a45908F789707cb3d0EBb892647d798b99";
+const COUNTER_CONTRACT_ABI = ["function increment() external",
+"function counter() public view returns(uint256)"];
 
 function App() {
+  // web3auth login
   const [gelatoLogin, setGelatoLogin] = useState<
     GaslessOnboarding | undefined
   >();
+  // loading or not
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  // provider for web3auth
   const [web3AuthProvider, setWeb3AuthProvider] =
     useState<SafeEventEmitterProvider | null>(null);
+  // user logged in through web3auth
   const [user, setUser] = useState<Partial<UserInfo> | null>(null);
+  // initialized or not
   const [isInit, setIsInit] = useState<boolean>(false);
+  // provider obtained from web3Authprovider
   const [provider, setProvider] = useState<SafeEventEmitterProvider|null>(null);
+  // details of gaslessWallet
   const [gaslessWallet, setGaslessWallet] = useState<GaslessWalletInterface | null>(null);
-  const [wallet, setWallet] = useState<{
-    address: string;
-    balance: string;
-    chainId: number;
-  } | null>(null);
+  //wallet details
+  const [wallet, setWallet] = useState<{address: string;balance: string;chainId: number;} | null>(null);
+  // is gasless wallet deployed?
   const [isDeployed, setIsDeployed] = useState<boolean>(false);
 
   useEffect(() => {
+    //function checking if logged in or not
     const init = async () => {
       if (!gelatoLogin || !web3AuthProvider) {
         return;
@@ -72,14 +77,15 @@ function App() {
       );
       await gelatoLogin.init();
       setGelatoLogin(gelatoLogin);
-      const provider = gelatoLogin.getProvider();
-      if (provider) {
+      const _provider = gelatoLogin.getProvider();
+      if (_provider) {
         setWeb3AuthProvider(provider);
       }
     } catch (error) {
       console.log(error);
     } finally {
       setIsLoading(false);
+      getGaslessWallet();
     }
   };
 
@@ -93,6 +99,7 @@ function App() {
     }
     const web3authProvider = await gelatoLogin.login();
     setWeb3AuthProvider(web3authProvider);
+    await getGaslessWallet();
   };
 
   const logout = async () => {
@@ -100,6 +107,7 @@ function App() {
       return;
     }
     await gelatoLogin.logout();
+    console.log("logging out...")
     setWeb3AuthProvider(null);
     setWallet(null);
     setUser(null);
@@ -114,22 +122,18 @@ function App() {
     await _gasslessWallet.init();
     console.log("initialized gasless wallet")
     setGaslessWallet(_gasslessWallet);
-    alert(_gasslessWallet.getAddress());
+    console.log(_gasslessWallet.getAddress());
     console.log("GASLESSWALLET INITIATED:" + _gasslessWallet.isInitiated());
   }
 
-  const getContract = async()=>{
-    const CONTRACT_ADDRESS:string="0xBf17E7a45908F789707cb3d0EBb892647d798b99";
-    const COUNTER_CONTRACT_ABI = ["function increment() external",
-    "function counter() public view returns(uint256)"];
+  const counter = async()=>{
     const contract = new ethers.Contract(
       CONTRACT_ADDRESS,
       COUNTER_CONTRACT_ABI,
       new ethers.providers.Web3Provider(web3AuthProvider!).getSigner(),
     );
-    // console.log(contract);
     let counterValue = await contract.counter();
-    console.log(counterValue.toString());
+    alert(counterValue.toString());
   }
 
   const increment = async()=>{
@@ -164,16 +168,14 @@ function App() {
       );
       await gelatoLogin.init();
       let gelatoSmartWallet = gelatoLogin.getGaslessWallet();
-      console.log(gelatoSmartWallet!);
-      console.log("=========");
       if(!gelatoSmartWallet){
-        console.log("smart wallet not initiated");
+        alert("smart wallet not initiated");
       }else{
         const { taskId } = await gelatoLogin!.getGaslessWallet().sponsorTransaction(
           "0xBf17E7a45908F789707cb3d0EBb892647d798b99",
           data!
           );
-          console.log(taskId);
+          alert("https://relay.gelato.digital/tasks/status/"+taskId);
       }
     } catch (error) {
       console.log(error);
@@ -185,13 +187,10 @@ function App() {
   ) : (
     <div>
       <p>Yo! You have logged in</p>
-      <p>{user?.email}</p>
-      <p>{user?.profileImage}</p>
       <p>{user?.name}</p>
-      <button onClick={getGaslessWallet}>get gasless wallet</button>
-      <button onClick={async () => alert(await gaslessWallet!.isDeployed())}>is gasless wallet deployed?</button>
-      <button onClick={()=>alert(wallet?.address)}>get wallet address</button>
-      <button onClick={getContract}>get contract</button>
+      <p>{user?.email}</p>
+      <p>Gassless Wallet Address : {wallet?.address}</p>
+      <button onClick={counter}>counter</button>
       <button onClick={increment}>increment</button>
     </div>
   );
