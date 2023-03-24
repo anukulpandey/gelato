@@ -18,6 +18,7 @@ function App() {
     useState<SafeEventEmitterProvider | null>(null);
   const [user, setUser] = useState<Partial<UserInfo> | null>(null);
   const [isInit, setIsInit] = useState<boolean>(false);
+  const [provider, setProvider] = useState<SafeEventEmitterProvider|null>(null);
   const [gaslessWallet, setGaslessWallet] = useState<GaslessWalletInterface | null>(null);
   const [wallet, setWallet] = useState<{
     address: string;
@@ -55,8 +56,8 @@ function App() {
       const loginConfig: LoginConfig = {
         domains: [window.location.origin],
         chain: {
-          id: 84531,
-          rpcUrl: "https://goerli.base.org",
+          id: 80001,
+          rpcUrl: "https://rpc-mumbai.maticvigil.com/",
         },
         ui: {
           theme: "dark",
@@ -113,9 +114,10 @@ function App() {
     await _gasslessWallet.init();
     console.log("initialized gasless wallet")
     setGaslessWallet(_gasslessWallet);
-    console.log("GASLESSWALLET ADDRESS:" + _gasslessWallet.getAddress());
+    alert(_gasslessWallet.getAddress());
     console.log("GASLESSWALLET INITIATED:" + _gasslessWallet.isInitiated());
   }
+
   const loggedInView = isLoading ? (
     <p>loading...</p>
   ) : (
@@ -126,12 +128,13 @@ function App() {
       <p>{user?.name}</p>
       <button onClick={getGaslessWallet}>get gasless wallet</button>
       <button onClick={async () => alert(await gaslessWallet!.isDeployed())}>is gasless wallet already deployed?</button>
+      <button onClick={()=>alert(wallet?.address)}>get wallet address</button>
     </div>
   );
 
   const toLoginInView = (
     <div>
-      <h2>Gelato Onboarding Minimal</h2>
+      <h2>Gelato Gasless Wallet Minimal</h2>
       <div>
         <button
           onClick={login}
