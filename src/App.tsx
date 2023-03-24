@@ -118,6 +118,68 @@ function App() {
     console.log("GASLESSWALLET INITIATED:" + _gasslessWallet.isInitiated());
   }
 
+  const getContract = async()=>{
+    const CONTRACT_ADDRESS:string="0xBf17E7a45908F789707cb3d0EBb892647d798b99";
+    const COUNTER_CONTRACT_ABI = ["function increment() external",
+    "function counter() public view returns(uint256)"];
+    const contract = new ethers.Contract(
+      CONTRACT_ADDRESS,
+      COUNTER_CONTRACT_ABI,
+      new ethers.providers.Web3Provider(web3AuthProvider!).getSigner(),
+    );
+    // console.log(contract);
+    let counterValue = await contract.counter();
+    console.log(counterValue.toString());
+  }
+
+  const increment = async()=>{
+    try {
+      const CONTRACT_ADDRESS:string="0xBf17E7a45908F789707cb3d0EBb892647d798b99";
+    const COUNTER_CONTRACT_ABI = ["function increment() external",
+    "function counter() public view returns(uint256)"];
+    const contract = new ethers.Contract(
+      CONTRACT_ADDRESS,
+      COUNTER_CONTRACT_ABI,
+      new ethers.providers.Web3Provider(web3AuthProvider!).getSigner(),
+    );
+      let { data } = await contract.populateTransaction.increment();
+      console.log(data!.toString());
+      const smartWalletConfig: GaslessWalletConfig = { apiKey: "DD42Cz1XfB_51WMhE3cST_3BEPFLHe_6utg2ZJxvDXg_" };
+      const loginConfig: LoginConfig = {
+        domains: [window.location.origin],
+        chain: {
+          id: 80001,
+          rpcUrl: "https://rpc-mumbai.maticvigil.com/",
+        },
+        ui: {
+          theme: "dark",
+        },
+        openLogin: {
+          redirectUrl: `${window.location.origin}/?chainId=${84531}`,
+        },
+      };
+      const gelatoLogin = new GaslessOnboarding(
+        loginConfig,
+        smartWalletConfig
+      );
+      await gelatoLogin.init();
+      let gelatoSmartWallet = gelatoLogin.getGaslessWallet();
+      console.log(gelatoSmartWallet!);
+      console.log("=========");
+      if(!gelatoSmartWallet){
+        console.log("smart wallet not initiated");
+      }else{
+        const { taskId } = await gelatoLogin!.getGaslessWallet().sponsorTransaction(
+          "0xBf17E7a45908F789707cb3d0EBb892647d798b99",
+          data!
+          );
+          console.log(taskId);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const loggedInView = isLoading ? (
     <p>loading...</p>
   ) : (
@@ -127,8 +189,10 @@ function App() {
       <p>{user?.profileImage}</p>
       <p>{user?.name}</p>
       <button onClick={getGaslessWallet}>get gasless wallet</button>
-      <button onClick={async () => alert(await gaslessWallet!.isDeployed())}>is gasless wallet already deployed?</button>
+      <button onClick={async () => alert(await gaslessWallet!.isDeployed())}>is gasless wallet deployed?</button>
       <button onClick={()=>alert(wallet?.address)}>get wallet address</button>
+      <button onClick={getContract}>get contract</button>
+      <button onClick={increment}>increment</button>
     </div>
   );
 
