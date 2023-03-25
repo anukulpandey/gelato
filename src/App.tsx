@@ -138,9 +138,6 @@ function App() {
 
   const increment = async()=>{
     try {
-      const CONTRACT_ADDRESS:string="0xBf17E7a45908F789707cb3d0EBb892647d798b99";
-    const COUNTER_CONTRACT_ABI = ["function increment() external",
-    "function counter() public view returns(uint256)"];
     const contract = new ethers.Contract(
       CONTRACT_ADDRESS,
       COUNTER_CONTRACT_ABI,
@@ -172,7 +169,7 @@ function App() {
         alert("smart wallet not initiated");
       }else{
         const { taskId } = await gelatoLogin!.getGaslessWallet().sponsorTransaction(
-          "0xBf17E7a45908F789707cb3d0EBb892647d798b99",
+          CONTRACT_ADDRESS,
           data!
           );
           alert("https://relay.gelato.digital/tasks/status/"+taskId);
