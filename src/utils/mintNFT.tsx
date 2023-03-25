@@ -10,7 +10,7 @@ export const mintNFT = async(CONTRACT_ADDRESS:string,COUNTER_CONTRACT_ABI:any,we
     );
       let { data } = await contract.populateTransaction.mint("heavybot");
       console.log(data!.toString());
-      const smartWalletConfig: GaslessWalletConfig = { apiKey: "DD42Cz1XfB_51WMhE3cST_3BEPFLHe_6utg2ZJxvDXg_" };
+      const smartWalletConfig: GaslessWalletConfig = { apiKey: "9gvM5yp4oHHAreWU1y9t7_b4E2CaBVWrYR5f9WkkaAA_" };
       const loginConfig: LoginConfig = {
         domains: [window.location.origin],
         chain: {
