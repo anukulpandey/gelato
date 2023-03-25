@@ -6,6 +6,7 @@ import "./App.css"; //import this for tailwind css
 import Navbar from "./components/Nav";
 import Main from "./components/Main";
 import Card from "./components/Card";
+import Select from "./components/Select.jsx";
 import {determineWinner} from './utils/determineWinner';
 import {initialized} from './utils/initialized';
 import {getGaslessWallet} from './utils/getGaslessWallet';
@@ -136,11 +137,26 @@ function App() {
     </div>
   );
 
+  const isFirstLogin = (
+    <div>
+      <div className="font-xbody flex justify-center h-max justify-self-center items-center flex-col">
+      <h2 className="text-white font-bold text-3xl underline">Gelato Gasless Warriors</h2>
+        <Select/>
+        <br />
+        <p className="text-white">Hey there! We will be assigning you any 3 random characters - you can win the rest of warriors by fighting with them</p>
+      </div>
+    </div>
+  );
+
   return (
     <>
     <Navbar/>
       <div >
-        {web3AuthProvider ? loggedInView : toLoginInView}
+       {/* prod 
+        {web3AuthProvider && isDeployed ?  loggedInView : web3AuthProvider? isFirstLogin :toLoginInView} */}
+       
+        {/* testing */}
+        {web3AuthProvider && isDeployed ?  isFirstLogin : web3AuthProvider? isFirstLogin :toLoginInView}
       </div>
     </>
   );
