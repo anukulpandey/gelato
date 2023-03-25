@@ -11,8 +11,9 @@ import {initialized} from './utils/initialized';
 import {getGaslessWallet} from './utils/getGaslessWallet';
 import abi from "./constants/contractAbi.json";
 import { mintNFT } from "./utils/mintNFT";
+import { getOwnedTokens } from "./utils/getOwnedTokens";
 
-const CONTRACT_ADDRESS:string="0x898806EC230F47B2e9D7eAf937C3c86E70030B22";
+const CONTRACT_ADDRESS:string="0x01B51abF2d47049540f144A8fc3657BeB8A564D2";
 const COUNTER_CONTRACT_ABI = abi;
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
 
   const [player1, setPlayer1] = useState('bluesword');
   const [player2, setPlayer2] = useState('');
+  const [player1Chars,setPlayer1Chars] = useState([]);
   const [playerCharacters,setPlayerCharacters] = useState([]);
 
   useEffect(() => {
@@ -112,8 +114,8 @@ function App() {
         </div>
         </div>
         <button onClick={()=>mintNFT(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!)}>MINT</button>
+        <button onClick={()=>getOwnedTokens(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,gaslessWallet?.getAddress()!,setPlayer1Chars)}>Get owned tokens</button>
         <button onClick={()=>{determineWinner(player1,player2,setStop)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Select</button>
-
       </div>
       <p>Yo! You have logged in</p>
       <p>{user?.email}</p>
