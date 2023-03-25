@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { SafeEventEmitterProvider, UserInfo } from "@web3auth/base";
 import { ethers } from "ethers";
 import {GaslessOnboarding,GaslessWalletConfig,GaslessWalletInterface,LoginConfig,} from "@gelatonetwork/gasless-onboarding";
-// import "./App.css"; //import this for tailwind css
+import "./App.css"; //import this for tailwind css
+import Navbar from "./components/Nav";
+import Main from "./components/Main";
+import Card from "./components/Card";
 
 const CONTRACT_ADDRESS:string="0xBf17E7a45908F789707cb3d0EBb892647d798b99";
 const COUNTER_CONTRACT_ABI = ["function increment() external",
@@ -30,6 +33,10 @@ function App() {
   const [wallet, setWallet] = useState<{address: string;balance: string;chainId: number;} | null>(null);
   // is gasless wallet deployed?
   const [isDeployed, setIsDeployed] = useState<boolean>(false);
+  const [stopped, setStop] = useState(false);
+
+  const [player1, setPlayer1] = useState('bluesword');
+  const [player2, setPlayer2] = useState('');
 
   useEffect(() => {
     //function checking if logged in or not
@@ -180,11 +187,21 @@ function App() {
   }
 
   const loggedInView = isLoading ? (
-    <p>loading...</p>
+    <p className="text-white">loading...</p>
   ) : (
     <div>
+      <div className="flex justify-evenly my-10">
+      <div>
+       <p className="border-b-2 my-2 border-gray-600 text-white"> Player-1 <span className="font-xbody uppercase text-l text-gray-400">[ {user?.name} ]</span> </p>
+      <Card isComp={false} isStopped={stopped} playerDetails={{"player":player1,"setFunc":setPlayer1}} />
+        </div>
+        <div>
+          
+     <p className="border-b-2 my-2 border-gray-600 text-white">Player-2 <span className="font-xbody uppercase text-xl text-gray-400">[ Comp ]</span> </p>
+      <Card isComp={true}  isStopped={stopped} playerDetails={{"player":player2,"setFunc":setPlayer2}}  />
+        </div>
+        </div>
       <p>Yo! You have logged in</p>
-      <p>{user?.name}</p>
       <p>{user?.email}</p>
       <p>Gassless Wallet Address : {wallet?.address}</p>
       <button onClick={counter}>counter</button>
@@ -194,28 +211,19 @@ function App() {
 
   const toLoginInView = (
     <div>
-      <h2>Gelato Gasless Wallet Minimal</h2>
-      <div>
-        <button
-          onClick={login}
-        >
-          Login
-        </button>
+      <div className="font-xbody flex justify-center h-max justify-self-center items-center flex-col">
+      <h2 className="text-white font-bold text-3xl underline">Gelato Gasless Warriors</h2>
+        <Main/>
+        <button onClick={login} className="py-2 px-4 border-dashed border-gray-400 border-4  tracking-widest text-white">Connect</button>
+        <br />
+        <p className="text-white">Login to play the game</p>
       </div>
     </div>
   );
 
   return (
     <>
-      {web3AuthProvider && (
-        <div >
-          <button
-            onClick={logout}
-          >
-            <p >Logout</p>
-          </button>
-        </div>
-      )}
+    <Navbar/>
       <div >
         {web3AuthProvider ? loggedInView : toLoginInView}
       </div>
