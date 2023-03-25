@@ -6,6 +6,9 @@ import "./App.css"; //import this for tailwind css
 import Navbar from "./components/Nav";
 import Main from "./components/Main";
 import Card from "./components/Card";
+import {determineWinner} from './utils/determineWinner';
+import {initialized} from './utils/initialized';
+import {getGaslessWallet} from './utils/getGaslessWallet';
 
 const CONTRACT_ADDRESS:string="0xBf17E7a45908F789707cb3d0EBb892647d798b99";
 const COUNTER_CONTRACT_ABI = ["function increment() external",
@@ -37,6 +40,7 @@ function App() {
 
   const [player1, setPlayer1] = useState('bluesword');
   const [player2, setPlayer2] = useState('');
+  const [playerCharacters,setPlayerCharacters] = useState([]);
 
   useEffect(() => {
     //function checking if logged in or not
@@ -61,44 +65,10 @@ function App() {
     init();
   }, [web3AuthProvider]);
 
-  const init = async () => {
-    setIsLoading(true);
-    try {
-      const smartWalletConfig: GaslessWalletConfig = { apiKey: "DD42Cz1XfB_51WMhE3cST_3BEPFLHe_6utg2ZJxvDXg_" };
-      const loginConfig: LoginConfig = {
-        domains: [window.location.origin],
-        chain: {
-          id: 80001,
-          rpcUrl: "https://rpc-mumbai.maticvigil.com/",
-        },
-        ui: {
-          theme: "dark",
-        },
-        openLogin: {
-          redirectUrl: `${window.location.origin}/?chainId=${84531}`,
-        },
-      };
-      const gelatoLogin = new GaslessOnboarding(
-        loginConfig,
-        smartWalletConfig
-      );
-      await gelatoLogin.init();
-      setGelatoLogin(gelatoLogin);
-      const _provider = gelatoLogin.getProvider();
-      if (_provider) {
-        setWeb3AuthProvider(provider);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-      getGaslessWallet();
-    }
-  };
 
   const login = async () => {
     if (!isInit) {
-      init();
+      initialized(setIsLoading,setGelatoLogin,setWeb3AuthProvider,provider,getGaslessWallet);
       setIsInit(true);
     }
     if (!gelatoLogin) {
@@ -106,7 +76,7 @@ function App() {
     }
     const web3authProvider = await gelatoLogin.login();
     setWeb3AuthProvider(web3authProvider);
-    await getGaslessWallet();
+    await getGaslessWallet(gelatoLogin,setGaslessWallet);
   };
 
   const logout = async () => {
@@ -114,24 +84,10 @@ function App() {
       return;
     }
     await gelatoLogin.logout();
-    console.log("logging out...")
     setWeb3AuthProvider(null);
     setWallet(null);
     setUser(null);
   };
-
-  const getGaslessWallet = async () => {
-    if (!gelatoLogin) {
-      return;
-    }
-    const _gasslessWallet: GaslessWalletInterface = gelatoLogin.getGaslessWallet();
-    console.log("initializing ...")
-    await _gasslessWallet.init();
-    console.log("initialized gasless wallet")
-    setGaslessWallet(_gasslessWallet);
-    console.log(_gasslessWallet.getAddress());
-    console.log("GASLESSWALLET INITIATED:" + _gasslessWallet.isInitiated());
-  }
 
   const counter = async()=>{
     const contract = new ethers.Contract(
@@ -186,14 +142,17 @@ function App() {
     }
   }
 
+  
+
   const loggedInView = isLoading ? (
     <p className="text-white">loading...</p>
   ) : (
     <div>
+      <div>
       <div className="flex justify-evenly my-10">
       <div>
        <p className="border-b-2 my-2 border-gray-600 text-white"> Player-1 <span className="font-xbody uppercase text-l text-gray-400">[ {user?.name} ]</span> </p>
-      <Card isComp={false} isStopped={stopped} playerDetails={{"player":player1,"setFunc":setPlayer1}} />
+      <Card isComp={false} isStopped={stopped} playerDetails={{"player":player1,"setFunc":setPlayer1,"playerCharacters":playerCharacters}} />
         </div>
         <div>
           
@@ -201,11 +160,13 @@ function App() {
       <Card isComp={true}  isStopped={stopped} playerDetails={{"player":player2,"setFunc":setPlayer2}}  />
         </div>
         </div>
+        <button onClick={()=>{determineWinner(player1,player2,setStop)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Select</button>
+
+      </div>
       <p>Yo! You have logged in</p>
       <p>{user?.email}</p>
       <p>Gassless Wallet Address : {wallet?.address}</p>
-      <button onClick={counter}>counter</button>
-      <button onClick={increment}>increment</button>
+
     </div>
   );
 

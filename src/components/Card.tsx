@@ -15,7 +15,7 @@ function Card(props: any) {
         }
         intervalId = setInterval(() => {
             randomSetter();
-        }, 3000);
+        }, 1000);
         return () => clearInterval(intervalId!);
     }, [])
 
@@ -45,7 +45,7 @@ function Card(props: any) {
         }
     }
     return (
-        <div className='font-xbody w-52 h-80'>
+        <div className='font-xbody w-52 h-80 text-white'>
             <p>{charArray[idx]}</p>
             <img src={`/char/${charArray[idx]}.gif`} alt="" className=' border-4 rounded-md border-dashed ' />
             <div className='flex justify-between py-2'>
