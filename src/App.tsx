@@ -9,10 +9,11 @@ import Card from "./components/Card";
 import {determineWinner} from './utils/determineWinner';
 import {initialized} from './utils/initialized';
 import {getGaslessWallet} from './utils/getGaslessWallet';
+import abi from "./constants/contractAbi.json";
+import { mintNFT } from "./utils/mintNFT";
 
-const CONTRACT_ADDRESS:string="0xBf17E7a45908F789707cb3d0EBb892647d798b99";
-const COUNTER_CONTRACT_ABI = ["function increment() external",
-"function counter() public view returns(uint256)"];
+const CONTRACT_ADDRESS:string="0x898806EC230F47B2e9D7eAf937C3c86E70030B22";
+const COUNTER_CONTRACT_ABI = abi;
 
 function App() {
   // web3auth login
@@ -37,6 +38,7 @@ function App() {
   // is gasless wallet deployed?
   const [isDeployed, setIsDeployed] = useState<boolean>(false);
   const [stopped, setStop] = useState(false);
+  const [connectText,setConnectText] = useState("Connect");
 
   const [player1, setPlayer1] = useState('bluesword');
   const [player2, setPlayer2] = useState('');
@@ -67,6 +69,7 @@ function App() {
 
 
   const login = async () => {
+    setConnectText("Start Game")
     if (!isInit) {
       initialized(setIsLoading,setGelatoLogin,setWeb3AuthProvider,provider,getGaslessWallet);
       setIsInit(true);
@@ -74,6 +77,7 @@ function App() {
     if (!gelatoLogin) {
       return;
     }
+    setConnectText("Connecting...")
     const web3authProvider = await gelatoLogin.login();
     setWeb3AuthProvider(web3authProvider);
     await getGaslessWallet(gelatoLogin,setGaslessWallet);
@@ -88,59 +92,6 @@ function App() {
     setWallet(null);
     setUser(null);
   };
-
-  const counter = async()=>{
-    const contract = new ethers.Contract(
-      CONTRACT_ADDRESS,
-      COUNTER_CONTRACT_ABI,
-      new ethers.providers.Web3Provider(web3AuthProvider!).getSigner(),
-    );
-    let counterValue = await contract.counter();
-    alert(counterValue.toString());
-  }
-
-  const increment = async()=>{
-    try {
-    const contract = new ethers.Contract(
-      CONTRACT_ADDRESS,
-      COUNTER_CONTRACT_ABI,
-      new ethers.providers.Web3Provider(web3AuthProvider!).getSigner(),
-    );
-      let { data } = await contract.populateTransaction.increment();
-      console.log(data!.toString());
-      const smartWalletConfig: GaslessWalletConfig = { apiKey: "DD42Cz1XfB_51WMhE3cST_3BEPFLHe_6utg2ZJxvDXg_" };
-      const loginConfig: LoginConfig = {
-        domains: [window.location.origin],
-        chain: {
-          id: 80001,
-          rpcUrl: "https://rpc-mumbai.maticvigil.com/",
-        },
-        ui: {
-          theme: "dark",
-        },
-        openLogin: {
-          redirectUrl: `${window.location.origin}/?chainId=${84531}`,
-        },
-      };
-      const gelatoLogin = new GaslessOnboarding(
-        loginConfig,
-        smartWalletConfig
-      );
-      await gelatoLogin.init();
-      let gelatoSmartWallet = gelatoLogin.getGaslessWallet();
-      if(!gelatoSmartWallet){
-        alert("smart wallet not initiated");
-      }else{
-        const { taskId } = await gelatoLogin!.getGaslessWallet().sponsorTransaction(
-          CONTRACT_ADDRESS,
-          data!
-          );
-          alert("https://relay.gelato.digital/tasks/status/"+taskId);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   
 
@@ -160,13 +111,14 @@ function App() {
       <Card isComp={true}  isStopped={stopped} playerDetails={{"player":player2,"setFunc":setPlayer2}}  />
         </div>
         </div>
+        <button onClick={()=>mintNFT(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!)}>MINT</button>
         <button onClick={()=>{determineWinner(player1,player2,setStop)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Select</button>
 
       </div>
       <p>Yo! You have logged in</p>
       <p>{user?.email}</p>
       <p>Gassless Wallet Address : {wallet?.address}</p>
-
+      <p>Gassless Wallet Address : {gaslessWallet?.getAddress()}</p>
     </div>
   );
 
@@ -175,7 +127,7 @@ function App() {
       <div className="font-xbody flex justify-center h-max justify-self-center items-center flex-col">
       <h2 className="text-white font-bold text-3xl underline">Gelato Gasless Warriors</h2>
         <Main/>
-        <button onClick={login} className="py-2 px-4 border-dashed border-gray-400 border-4  tracking-widest text-white">Connect</button>
+        <button onClick={login} className="py-2 px-4 border-dashed border-gray-400 border-4  tracking-widest text-white">{connectText}</button>
         <br />
         <p className="text-white">Login to play the game</p>
       </div>

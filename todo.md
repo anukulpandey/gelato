@@ -8,4 +8,8 @@
 
 ============
 todo: 
+    add a connecting button animation when clicked on connect :tick
     modify determineWinner to make computer win more times
+    CONTRACT:
+        mint , burn and maintain a record of nfts a particular user has 
+        
