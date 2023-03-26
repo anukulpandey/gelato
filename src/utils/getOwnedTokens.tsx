@@ -6,7 +6,7 @@ interface ImageData {
   image: string;
 }
 
-export const getOwnedTokens = async(CONTRACT_ADDRESS:string,COUNTER_CONTRACT_ABI:any,web3AuthProvider:any,address:string,setPlayer1Chars:any,setTokenIds:any)=>{
+export const getOwnedTokens = async(CONTRACT_ADDRESS:string,COUNTER_CONTRACT_ABI:any,web3AuthProvider:any,address:string,setPlayer1Chars:any,setTokenIds:any,setPlayer1:any)=>{
     try {
     const contract = new ethers.Contract(
       CONTRACT_ADDRESS,
@@ -29,6 +29,7 @@ export const getOwnedTokens = async(CONTRACT_ADDRESS:string,COUNTER_CONTRACT_ABI
       characters.push(characterLookup[parsedObject]);
       }
       setPlayer1Chars(characters);
+      setPlayer1(characters[0]);
     } catch (error) {
       console.log(error);
     }

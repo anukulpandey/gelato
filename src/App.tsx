@@ -45,7 +45,7 @@ function App() {
   const [stopped, setStop] = useState(false);
   const [connectText,setConnectText] = useState("Connect");
 
-  const [player1, setPlayer1] = useState('bluesword');
+  const [player1, setPlayer1] = useState('none');
   const [player2, setPlayer2] = useState('');
   const [player1Chars,setPlayer1Chars] = useState([]);
   const [tokenIds,setTokenIds] = useState([]);
@@ -88,7 +88,7 @@ function App() {
     const web3authProvider = await gelatoLogin.login();
     setWeb3AuthProvider(web3authProvider);
     await getGaslessWallet(gelatoLogin,setGaslessWallet);
-    getOwnedTokens(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,gaslessWallet?.getAddress()!,setPlayer1Chars,setTokenIds)
+    getOwnedTokens(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,gaslessWallet?.getAddress()!,setPlayer1Chars,setTokenIds,setPlayer1)
   };
 
   const logout = async () => {
@@ -102,7 +102,7 @@ function App() {
   };
 
   const refresh = ()=>{
-    getOwnedTokens(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,gaslessWallet?.getAddress()!,setPlayer1Chars,setTokenIds)
+    getOwnedTokens(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,gaslessWallet?.getAddress()!,setPlayer1Chars,setTokenIds,setPlayer1)
   }
   
 
@@ -122,12 +122,9 @@ function App() {
       <Card playerChars = {player1Chars} isComp={true} isStopped={stopped} playerDetails={{"player":player2,"setFunc":setPlayer2}}  />
         </div>
         </div>
-        <button onClick={()=>burnNFT(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,player1Chars,tokenIds,player1)}>BURN</button>
-        <button onClick={()=>mintNFT(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,"redflame")}>MINT</button>
-       {player1Chars[0]=="none"?<p className="text-white">
-        You need to refresh the page
+       {player1=="none"?<p className="text-white">
+        You need to refresh your characters by pressing 🔄
        </p>: <button onClick={()=>{determineWinner(player1,player2,setStop)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Fight</button> }
-       
       </div>
       <p>{user?.email}</p>
       <p>Gassless Wallet Address : {wallet?.address}</p>
