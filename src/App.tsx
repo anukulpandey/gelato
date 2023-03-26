@@ -107,15 +107,16 @@ function App() {
       <div className="flex justify-evenly my-10">
       <div>
        <p className="border-b-2 my-2 border-gray-600 text-white"> Player-1 <span className="font-xbody uppercase text-l text-gray-400">[ {user?.name} ]</span> </p>
-      <Card isComp={false} isStopped={stopped} playerDetails={{"player":player1,"setFunc":setPlayer1,"playerCharacters":player1Chars}} />
+      <Card isComp={false} playerChars = {player1Chars} isStopped={stopped} playerDetails={{"player":player1,"setFunc":setPlayer1}} />
         </div>
         <div>
           
      <p className="border-b-2 my-2 border-gray-600 text-white">Player-2 <span className="font-xbody uppercase text-xl text-gray-400">[ Comp ]</span> </p>
-      <Card isComp={true}  isStopped={stopped} playerDetails={{"player":player2,"setFunc":setPlayer2}}  />
+      <Card playerChars = {player1Chars} isComp={true} isStopped={stopped} playerDetails={{"player":player2,"setFunc":setPlayer2}}  />
         </div>
         </div>
         <button onClick={()=>burnNFT(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,ethers.BigNumber.from(1))}>BURN</button>
+        <button onClick={()=>mintNFT(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,"redflame")}>MINT</button>
         <button onClick={()=>getOwnedTokens(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,gaslessWallet?.getAddress()!,setPlayer1Chars,setTokenIds)}>Get owned tokens</button>
         <button onClick={()=>{determineWinner(player1,player2,setStop)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Fight</button>
       </div>
