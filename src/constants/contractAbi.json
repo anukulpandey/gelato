@@ -211,6 +211,29 @@
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_c1",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_c2",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_c3",
+				"type": "string"
+			}
+		],
+		"name": "mintMultiple",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "name",
 		"outputs": [

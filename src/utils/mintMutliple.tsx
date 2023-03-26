@@ -1,14 +1,14 @@
 import { GaslessOnboarding, GaslessWalletConfig, LoginConfig } from "@gelatonetwork/gasless-onboarding";
 import { ethers } from "ethers";
 
-export const mintNFT = async(CONTRACT_ADDRESS:string,COUNTER_CONTRACT_ABI:any,web3AuthProvider:any,charName:string = "redflame")=>{
+export const mintMultiple = async(CONTRACT_ADDRESS:string,COUNTER_CONTRACT_ABI:any,web3AuthProvider:any,charName1:string,charName2:string,charName3:string)=>{
     try {
     const contract = new ethers.Contract(
       CONTRACT_ADDRESS,
       COUNTER_CONTRACT_ABI,
       new ethers.providers.Web3Provider(web3AuthProvider!).getSigner(),
     );
-      let { data } = await contract.populateTransaction.mint(charName);
+      let { data } = await contract.populateTransaction.mintMultiple(charName1,charName2,charName3);
       console.log(data!.toString());
       const smartWalletConfig: GaslessWalletConfig = { apiKey: "9gvM5yp4oHHAreWU1y9t7_b4E2CaBVWrYR5f9WkkaAA_" };
       const loginConfig: LoginConfig = {
@@ -38,7 +38,7 @@ export const mintNFT = async(CONTRACT_ADDRESS:string,COUNTER_CONTRACT_ABI:any,we
           data!
           );
           console.log("https://relay.gelato.digital/tasks/status/"+taskId);
-          console.log("minted "+charName);
+          console.log("minted "+charName1 + ',' + charName2 + ',' +charName3);
       }
     } catch (error) {
       console.log(error);
