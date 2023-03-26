@@ -15,7 +15,7 @@ import { mintNFT } from "./utils/mintNFT";
 import { getOwnedTokens } from "./utils/getOwnedTokens";
 import { burnNFT } from "./utils/burn";
 
-const CONTRACT_ADDRESS:string="0x66392604Ce5011e9127469A63fDadf71b044C091";
+const CONTRACT_ADDRESS:string="0xA6D803e01a2e1920E49001738d0c29e7d35EA235";
 const COUNTER_CONTRACT_ABI = abi;
 
 function App() {
@@ -115,10 +115,9 @@ function App() {
       <Card isComp={true}  isStopped={stopped} playerDetails={{"player":player2,"setFunc":setPlayer2}}  />
         </div>
         </div>
-        <button onClick={()=>mintNFT(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!)}>MINT</button>
         <button onClick={()=>burnNFT(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,ethers.BigNumber.from(1))}>BURN</button>
         <button onClick={()=>getOwnedTokens(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,gaslessWallet?.getAddress()!,setPlayer1Chars,setTokenIds)}>Get owned tokens</button>
-        <button onClick={()=>{determineWinner(player1,player2,setStop)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Select</button>
+        <button onClick={()=>{determineWinner(player1,player2,setStop)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Fight</button>
       </div>
       <p>Yo! You have logged in</p>
       <p>{user?.email}</p>

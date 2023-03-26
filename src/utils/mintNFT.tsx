@@ -1,7 +1,7 @@
 import { GaslessOnboarding, GaslessWalletConfig, LoginConfig } from "@gelatonetwork/gasless-onboarding";
 import { ethers } from "ethers";
 
-export const mintNFT = async(CONTRACT_ADDRESS:string,COUNTER_CONTRACT_ABI:any,web3AuthProvider:any,charName:string = "redflame")=>{
+export const mintNFT = async(CONTRACT_ADDRESS:string,COUNTER_CONTRACT_ABI:any,web3AuthProvider:any,charName:string)=>{
     try {
     const contract = new ethers.Contract(
       CONTRACT_ADDRESS,
