@@ -6,7 +6,7 @@ interface ImageData {
   image: string;
 }
 
-export const getOwnedTokens = async(CONTRACT_ADDRESS:string,COUNTER_CONTRACT_ABI:any,web3AuthProvider:any,address:string,setPlayer1Chars:any)=>{
+export const getOwnedTokens = async(CONTRACT_ADDRESS:string,COUNTER_CONTRACT_ABI:any,web3AuthProvider:any,address:string,setPlayer1Chars:any,setTokenIds:any)=>{
     try {
     const contract = new ethers.Contract(
       CONTRACT_ADDRESS,
@@ -14,6 +14,9 @@ export const getOwnedTokens = async(CONTRACT_ADDRESS:string,COUNTER_CONTRACT_ABI
       new ethers.providers.Web3Provider(web3AuthProvider!).getSigner(),
     );
       let result:[ethers.BigNumber] = await contract.getOwnedTokens(ethers.utils.getAddress(address));
+      let resultAsNumbers: number[] = result.map(bn => bn.toNumber());
+      console.log(resultAsNumbers);
+      setTokenIds(resultAsNumbers);
       let characters = [];
       for(let i=0;i<result.length;i++){
         // console.log(result[i].toNumber());

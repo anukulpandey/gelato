@@ -13,6 +13,7 @@ import {getGaslessWallet} from './utils/getGaslessWallet';
 import abi from "./constants/contractAbi.json";
 import { mintNFT } from "./utils/mintNFT";
 import { getOwnedTokens } from "./utils/getOwnedTokens";
+import { burnNFT } from "./utils/burn";
 
 const CONTRACT_ADDRESS:string="0x66392604Ce5011e9127469A63fDadf71b044C091";
 const COUNTER_CONTRACT_ABI = abi;
@@ -45,6 +46,7 @@ function App() {
   const [player1, setPlayer1] = useState('bluesword');
   const [player2, setPlayer2] = useState('');
   const [player1Chars,setPlayer1Chars] = useState([]);
+  const [tokenIds,setTokenIds] = useState([]);
 
   useEffect(() => {
     //function checking if logged in or not
@@ -114,7 +116,8 @@ function App() {
         </div>
         </div>
         <button onClick={()=>mintNFT(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!)}>MINT</button>
-        <button onClick={()=>getOwnedTokens(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,gaslessWallet?.getAddress()!,setPlayer1Chars)}>Get owned tokens</button>
+        <button onClick={()=>burnNFT(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,ethers.BigNumber.from(1))}>BURN</button>
+        <button onClick={()=>getOwnedTokens(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,gaslessWallet?.getAddress()!,setPlayer1Chars,setTokenIds)}>Get owned tokens</button>
         <button onClick={()=>{determineWinner(player1,player2,setStop)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Select</button>
       </div>
       <p>Yo! You have logged in</p>
@@ -153,11 +156,11 @@ function App() {
     <>
     <Navbar/>
       <div >
-       {/* prod 
-        {web3AuthProvider && isDeployed ?  loggedInView : web3AuthProvider? isFirstLogin :toLoginInView} */}
+       {/* prod  */}
+        {web3AuthProvider && isDeployed ?  loggedInView : web3AuthProvider? isFirstLogin :toLoginInView}
        
-        {/* testing */}
-        {web3AuthProvider && isDeployed ?  isFirstLogin : web3AuthProvider? isFirstLogin :toLoginInView}
+        {/* testing
+        {web3AuthProvider && isDeployed ?  isFirstLogin : web3AuthProvider? isFirstLogin :toLoginInView} */}
       </div>
     </>
   );
