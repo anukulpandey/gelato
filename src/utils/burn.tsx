@@ -1,13 +1,15 @@
 import { GaslessOnboarding, GaslessWalletConfig, LoginConfig } from "@gelatonetwork/gasless-onboarding";
 import { ethers } from "ethers";
 
-export const burnNFT = async(CONTRACT_ADDRESS:string,COUNTER_CONTRACT_ABI:any,web3AuthProvider:any,tokenId:ethers.BigNumber)=>{
+export const burnNFT = async(CONTRACT_ADDRESS:string,COUNTER_CONTRACT_ABI:any,web3AuthProvider:any,player1Chars:string[],tokenIds:any,player1:string)=>{
     try {
     const contract = new ethers.Contract(
       CONTRACT_ADDRESS,
       COUNTER_CONTRACT_ABI,
       new ethers.providers.Web3Provider(web3AuthProvider!).getSigner(),
     );
+    const idx:number = player1Chars.indexOf(player1);
+    const tokenId: ethers.BigNumber = tokenIds[idx];
       let { data } = await contract.populateTransaction.burn(tokenId);
       console.log(data!.toString());
       const smartWalletConfig: GaslessWalletConfig = { apiKey: "9gvM5yp4oHHAreWU1y9t7_b4E2CaBVWrYR5f9WkkaAA_" };
