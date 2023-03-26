@@ -29,6 +29,7 @@ export const getOwnedTokens = async(CONTRACT_ADDRESS:string,COUNTER_CONTRACT_ABI
       characters.push(characterLookup[parsedObject]);
       }
       setPlayer1Chars(characters);
+      console.log(characters);
       setPlayer1(characters[0]);
     } catch (error) {
       console.log(error);

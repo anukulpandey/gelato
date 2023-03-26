@@ -30,19 +30,27 @@ function Card(props: any) {
   };
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout | null = null;
     const randomSetter = () => {
       if (myVal) {
-        setIdx(Math.floor(Math.random() * charArray.length));
-        props.playerDetails.setFunc(charArray[idx]);
+        const randomIdx = Math.floor(Math.random() * charArray.length);
+        setIdx(randomIdx);
       }
     };
+  
+    const updatePlayerDetails = () => {
+      props.playerDetails.setFunc(charArray[idx]);
+    };
+    let intervalId: NodeJS.Timeout | null = null;
     intervalId = setInterval(() => {
       randomSetter();
     }, 1000);
-    return () => clearInterval(intervalId!);
-  }, []);
-
+  
+    updatePlayerDetails(); // Call the update function initially
+  
+    return () => {
+      clearInterval(intervalId!);
+    };
+  }, [idx]);
   return (
     <div className="font-xbody w-52 h-80 text-white">
       <p>{charArray[idx]}</p>

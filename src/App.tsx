@@ -50,6 +50,11 @@ function App() {
   const [player1Chars,setPlayer1Chars] = useState([]);
   const [tokenIds,setTokenIds] = useState([]);
 
+  //if this is true then Won will be displayed or else Lose
+  const [areYouWinningSon,setAreYouWinningSon] = useState('false');
+  //if this is true then i will show the win or lose animaation 
+  const [transactionInProgress,setTransactionInProgress] = useState(false);
+
   useEffect(() => {
     //function checking if logged in or not
     const init = async () => {
@@ -74,6 +79,14 @@ function App() {
     init();
   }, [web3AuthProvider]);
 
+  const mint=()=>{
+    console.log(player2);
+    mintNFT(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,player2);
+  }
+
+  const burn=()=>{
+    burnNFT(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,player1Chars,tokenIds,player1);
+  }
 
   const login = async () => {
     setConnectText("Start Game")
@@ -110,6 +123,7 @@ function App() {
     <p className="text-white">loading...</p>
   ) : (
     <div>
+      {!transactionInProgress?
       <div>
       <div className="flex justify-evenly my-10">
       <div>
@@ -117,17 +131,32 @@ function App() {
       <Card isComp={false} playerChars = {player1Chars} isStopped={stopped} playerDetails={{"player":player1,"setFunc":setPlayer1}} />
         </div>
         <div>
-          
+    <button onClick={()=>console.log(player2)}>saf</button>
      <p className="border-b-2 my-2 border-gray-600 text-white">Player-2 <span className="font-xbody uppercase text-xl text-gray-400">[ Comp ]</span> </p>
       <Card playerChars = {player1Chars} isComp={true} isStopped={stopped} playerDetails={{"player":player2,"setFunc":setPlayer2}}  />
         </div>
         </div>
        {player1=="none"?<p className="text-white">
         You need to refresh your characters by pressing 🔄
-       </p>: <button onClick={()=>{determineWinner(player1,player2,setStop)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Fight</button> }
-      </div>
-      <p>{user?.email}</p>
-      <p>Gassless Wallet Address : {wallet?.address}</p>
+       </p>: <button onClick={()=>{determineWinner(player1,player2,setStop,mint,burn,setTransactionInProgress,setAreYouWinningSon)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Fight</button> }
+      </div>:
+      
+      areYouWinningSon? <div>
+        <button className="text-white" onClick={()=>{
+        setStop(false);
+        setTransactionInProgress(false);
+      }}>Close</button>
+        <Won/>
+      </div> : <div>
+      <button className="text-white" onClick={()=>{
+        setStop(false);
+        setTransactionInProgress(false);
+      }}>Close</button>
+      <Lost/>
+        </div>
+    }
+      {/* // <p>{user?.email}</p>
+      // <p>Gassless Wallet Address : {wallet?.address}</p> */}
     </div>
   );
 
