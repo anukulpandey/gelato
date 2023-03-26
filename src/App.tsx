@@ -120,7 +120,6 @@ function App() {
       <p>Yo! You have logged in</p>
       <p>{user?.email}</p>
       <p>Gassless Wallet Address : {wallet?.address}</p>
-      <p>Gassless Wallet Address : {gaslessWallet?.getAddress()}</p>
     </div>
   );
 
@@ -145,7 +144,7 @@ function App() {
         <p className="text-white text-2xl">This is a game in which you can get NFTs for free as long as you are a good player - or else you can buy some too</p>
         <p className="text-white text-2xl">As a welcome gift we are giving you 3️⃣🆓 NFTs which you can check at Opensea as well</p>
         <p className="text-white text-2xl">You can use these to fight with our inbuilt AI to win more NFTs or sell them on Opensea</p>
-        <Select contractDetails ={{CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider}} setPlayer1Chars={setPlayer1Chars} setIsDeployed={setIsDeployed}/>
+        <Select contractDetails ={{CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider}} address = {gaslessWallet?.getAddress()} setPlayer1Chars={setPlayer1Chars} setIsDeployed={setIsDeployed}/>
       </div>
     </div>
   );
@@ -158,7 +157,7 @@ function App() {
         {web3AuthProvider && isDeployed ?  loggedInView : web3AuthProvider? isFirstLogin :toLoginInView} */}
        
         {/* testing */}
-        {web3AuthProvider && isDeployed ?  loggedInView : web3AuthProvider? isFirstLogin :toLoginInView}
+        {web3AuthProvider && isDeployed ?  isFirstLogin : web3AuthProvider? isFirstLogin :toLoginInView}
       </div>
     </>
   );

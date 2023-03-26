@@ -3,7 +3,9 @@ import { mintMultiple } from '../utils/mintMutliple';
 
 export default function Select(props) {
   const [selectedCharacters, setSelectedCharacters] = useState([]);
-  const {contractDetails,setPlayer1Chars,setIsDeployed} = props;
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { contractDetails, setPlayer1Chars, setIsDeployed, address } = props;
+
   const handleCharacterSelect = (characterName) => {
     if (selectedCharacters.includes(characterName)) {
       setSelectedCharacters(selectedCharacters.filter(name => name !== characterName));
@@ -12,11 +14,17 @@ export default function Select(props) {
     }
   }
 
-  const handleSelectAll = () => {
-    setPlayer1Chars(selectedCharacters);
-    console.log(contractDetails);
-      mintMultiple(contractDetails.CONTRACT_ADDRESS,contractDetails.COUNTER_CONTRACT_ABI,contractDetails.web3AuthProvider,selectedCharacters[0],selectedCharacters[1],selectedCharacters[2]);
+  const handleSelectAll = async () => {
+    setIsProcessing(true);
+    try {
+      setPlayer1Chars(selectedCharacters);
+      console.log(contractDetails);
+      await mintMultiple(contractDetails.CONTRACT_ADDRESS, contractDetails.COUNTER_CONTRACT_ABI, contractDetails.web3AuthProvider, selectedCharacters[0], selectedCharacters[1], selectedCharacters[2]);
       setIsDeployed(true);
+    } catch (error) {
+      console.log(error);
+    }
+    setIsProcessing(false);
   }
 
   const renderCharacterButton = (src) => {
@@ -50,8 +58,13 @@ export default function Select(props) {
         {renderCharacterButton('/char/redflame.gif')}
       </div>
       <br />
-      {selectedCharacters.length === 3 && <>
-      <button className='text-white text-2xl bg-black px-8 ' onClick={handleSelectAll}>Select All Characters</button>   <p className='text-white'>PS: These NFTs will be visible on Opensea as well</p></>}
+      {selectedCharacters.length === 3 && !isProcessing && <>
+        <button className='text-white text-2xl bg-black px-8 ' onClick={handleSelectAll}>Select these Characters</button>
+        <p className='text-white'>PS: These NFTs will be visible on <a className='text-blue' href={`https://testnets.opensea.io/${address}/collected`}>Opensea</a> as well</p>
+        <a className='text-white underline' href={`https://testnets.opensea.io/${address}/collected`}>Click here to check it out</a>
+      </>}
+      {isProcessing && <div className="text-white text-2xl bg-black px-8">Processing... <div className="spinner"><p className='text-white'>PS: These NFTs will be visible on <a className='text-blue' href={`https://testnets.opensea.io/${address}/collected`}>Opensea</a> as well</p>
+        <a className='text-white underline' href={`https://testnets.opensea.io/${address}/collected`}>Click here to check it out</a></div></div>}
     </div>
   )
 }
