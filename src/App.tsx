@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { SafeEventEmitterProvider, UserInfo } from "@web3auth/base";
 import { ethers } from "ethers";
 import {GaslessOnboarding,GaslessWalletConfig,GaslessWalletInterface,LoginConfig,} from "@gelatonetwork/gasless-onboarding";
-import "./App.css"; //import this for tailwind css
+import "./App.css"; 
 import Navbar from "./components/Nav";
 import Main from "./components/Main";
 import Won from "./components/Won";
 import Lost from "./components/Lost";
 import Card from "./components/Card";
 import Select from "./components/Select.jsx";
+import SingleCard from "./components/SingleCard";
 import {determineWinner} from './utils/determineWinner';
 import {initialized} from './utils/initialized';
 import {getGaslessWallet} from './utils/getGaslessWallet';
@@ -118,6 +119,13 @@ function App() {
     getOwnedTokens(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,gaslessWallet?.getAddress()!,setPlayer1Chars,setTokenIds,setPlayer1)
   }
   
+  const closeButton=(
+      <button className="text-white" onClick={()=>{
+        setStop(false);
+        setTransactionInProgress(false);
+        refresh();
+      }}>Close</button>
+    );
 
   const loggedInView = isLoading ? (
     <p className="text-white">loading...</p>
@@ -131,7 +139,6 @@ function App() {
       <Card isComp={false} playerChars = {player1Chars} isStopped={stopped} playerDetails={{"player":player1,"setFunc":setPlayer1}} />
         </div>
         <div>
-    <button onClick={()=>console.log(player2)}>saf</button>
      <p className="border-b-2 my-2 border-gray-600 text-white">Player-2 <span className="font-xbody uppercase text-xl text-gray-400">[ Comp ]</span> </p>
       <Card playerChars = {player1Chars} isComp={true} isStopped={stopped} playerDetails={{"player":player2,"setFunc":setPlayer2}}  />
         </div>
@@ -141,19 +148,29 @@ function App() {
        </p>: <button onClick={()=>{determineWinner(player1,player2,setStop,mint,burn,setTransactionInProgress,setAreYouWinningSon)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Fight</button> }
       </div>:
       
-      areYouWinningSon? <div>
-        <button className="text-white" onClick={()=>{
-        setStop(false);
-        setTransactionInProgress(false);
-      }}>Close</button>
-        <Won/>
-      </div> : <div>
-      <button className="text-white" onClick={()=>{
-        setStop(false);
-        setTransactionInProgress(false);
-      }}>Close</button>
-      <Lost/>
-        </div>
+      areYouWinningSon?<div className="flex justify-evenly items-center px-24">
+      <Won />
+      <div className="w-1/2">
+        <p className="text-white">
+          You won so here is your {player2}
+        </p>
+        <br />
+        {closeButton}
+      </div>
+      <SingleCard src={`/char/${player2}.gif`} charName={player2} />
+    </div>
+    
+     : <div className="flex justify-evenly items-center px-24">
+      <Lost />
+      <div className="w-1/2">
+        <p className="text-white">
+          Sad to see {player1} go!
+        </p>
+        <br />
+        {closeButton}
+      </div>
+      <SingleCard src={`/char/${player2}.gif`} charName={player2} burn={true}/>
+    </div>
     }
       {/* // <p>{user?.email}</p>
       // <p>Gassless Wallet Address : {wallet?.address}</p> */}
