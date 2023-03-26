@@ -5,6 +5,8 @@ import {GaslessOnboarding,GaslessWalletConfig,GaslessWalletInterface,LoginConfig
 import "./App.css"; //import this for tailwind css
 import Navbar from "./components/Nav";
 import Main from "./components/Main";
+import Won from "./components/Won";
+import Lost from "./components/Lost";
 import Card from "./components/Card";
 import Select from "./components/Select.jsx";
 import {determineWinner} from './utils/determineWinner';
@@ -122,10 +124,11 @@ function App() {
         </div>
         <button onClick={()=>burnNFT(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,player1Chars,tokenIds,player1)}>BURN</button>
         <button onClick={()=>mintNFT(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,"redflame")}>MINT</button>
+       {player1Chars[0]=="none"?<p className="text-white">
+        You need to refresh the page
+       </p>: <button onClick={()=>{determineWinner(player1,player2,setStop)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Fight</button> }
        
-        <button onClick={()=>{determineWinner(player1,player2,setStop)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Fight</button>
       </div>
-      <p>Yo! You have logged in</p>
       <p>{user?.email}</p>
       <p>Gassless Wallet Address : {wallet?.address}</p>
     </div>
