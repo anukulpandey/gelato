@@ -184,14 +184,17 @@ function App() {
   const toLoginInView = (
     <div>
       <div className="font-xbody flex justify-center h-max justify-self-center items-center flex-col">
+        <div className="flex align-middle justify-center items-center">
       <h2 className="text-white font-bold text-4xl underline">Gelato Gasless Warriors</h2>
+    <img src="/gelato.svg" alt="" className="w-28"/>
+        </div>
         <Main/>
         {displayOfBtn && (
         <button onClick={login} className="py-2 px-4 border-dashed border-gray-400 border-4  tracking-widest text-white">{connectText}</button>
         )}
         {!displayOfBtn && (
        <div>
-        <p className="text-white">Loading ... </p>
+        <p className="text-white text-xl">Loading ... </p>
        </div>
         )}
 

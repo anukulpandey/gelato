@@ -1,18 +1,44 @@
-# Getting Started with App
-## Available Scripts
+# Gelato Gasless Warriors [ Pixel Warriors - The NFT Showdown]
 
-In the project directory, you can run:
+## Introduction
+Blockchain technology has the potential to revolutionize the way we conduct financial transactions and exchange assets. However, the complexity of blockchain technology can be a barrier for non-tech users, particularly when it comes to understanding gas fees and storing private keys.
 
-### `yarn start`
+Playing a game which utilizes blockchain technology is not much feasible at the moment I am writing this because user needs to sign the transaction manually after performing anything in the game.
 
-Runs the app in the development mode.
+Gas fees are a necessary aspect of blockchain transactions, as they compensate miners for processing transactions on the network. However, they can be a significant source of confusion and frustration for users. Account abstraction allows smart contracts to interact with multiple accounts on behalf of a user, eliminating the need for users to have gas or an Externally-owned account (EOA). Gasless transactions take this concept further by allowing a third party to pay for gas on behalf of the user, removing the need for users to understand gas altogether.
 
+So now the users don't need to worry about their private keys and they can play the game directly on the chain. Without signing transactions every now and then . Also not paying much attention to login and account creation as everything is handled by Gelato Onboarding SDK .
 
-## Environment Variables
-```
-REACT_APP_SPONSOR_API_KEY=
-REACT_APP_SPONSOR_API_KEY_MAINNET=
-REACT_APP_GNOSIS_RPC_URL=
-REACT_APP_MUMBAI_RPC_URL=
-REACT_APP_BASEGOERLI_RPC_URL=
-```
+The main aim of account abstraction is to provide users an experience by which they won't even think what is the underlying technology behind the game and this POC achieves the same.
+
+## Features
+- User can login using any social account like Google , Discord etc
+- They can claim NFTs for free i.e without paying gas fees
+- They can mint and burn NFTs by playing the game
+- User have to fight with computer to get NFTs
+- All minted NFTs will be there on the Opensea
+- It is an onchain game which means that every transaction is publicly available at polygon scan
+- Users can sell these NFTs to earn money or claim all the NFTs to make the collection by fighting with computer
+
+## TODO
+- Instead of card game , will make Indie style game [ this was just for POC that GameFi is possible with account abstraction ]
+- Will allow user to build custom characters
+- Instead of fighting with computer will add support for 1v1 fight
+- The lost players NFT will not be burnt instead it will be demoted only
+- Each character will have different attributes
+- there will be a global record for all players 
+- a lot more to go
+
+## Tech Used
+- React
+- Typescript
+- Gelato Onboarding SDK
+- Gelato Gasless Wallet
+- Solidity
+- Tailwind CSS
+
+## Run it locally
+`git clone https://github.com/anukulpandey/gelato`
+`cd gelato`
+`yarn install`
+`yarn start`
