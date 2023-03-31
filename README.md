@@ -11,6 +11,20 @@ So now the users don't need to worry about their private keys and they can play 
 
 The main aim of account abstraction is to provide users an experience by which they won't even think what is the underlying technology behind the game and this POC achieves the same.
 
+## Screenshots
+- Landing Page
+<img width="960" alt="image" src="https://user-images.githubusercontent.com/62092256/229060929-da5ade3f-0865-42e5-83ec-6878535543a7.png">
+
+- Select Characters Page
+<img width="960" alt="image" src="https://user-images.githubusercontent.com/62092256/229061184-67ed4810-2722-4bc8-a123-e74b12a0ba69.png">
+
+- Fight Page
+<img width="960" alt="image" src="https://user-images.githubusercontent.com/62092256/229061413-6ed9055b-87a2-4c84-8232-ca4284289808.png">
+
+- User's NFTs on Opensea
+<img width="960" alt="image" src="https://user-images.githubusercontent.com/62092256/229061541-33cea1b2-f0f8-4d53-b839-cf2fc8cc9293.png">
+
+
 ## Features
 - User can login using any social account like Google , Discord etc
 - They can claim NFTs for free i.e without paying gas fees
