@@ -50,6 +50,7 @@ function App() {
   const [player2, setPlayer2] = useState('');
   const [player1Chars,setPlayer1Chars] = useState([]);
   const [tokenIds,setTokenIds] = useState([]);
+  const [displayOfBtn,setDisplayOfBtn] = useState(true);
 
   //if this is true then Won will be displayed or else Lose
   const [areYouWinningSon,setAreYouWinningSon] = useState('false');
@@ -90,20 +91,23 @@ function App() {
   }
 
   const login = async () => {
-    setConnectText("Start Game")
-    if (!isInit) {
-      initialized(setIsLoading,setGelatoLogin,setWeb3AuthProvider,provider,getGaslessWallet);
-      setIsInit(true);
-    }
-    if (!gelatoLogin) {
-      return;
-    }
-    setConnectText("Connecting...")
-    const web3authProvider = await gelatoLogin.login();
-    setWeb3AuthProvider(web3authProvider);
-    await getGaslessWallet(gelatoLogin,setGaslessWallet);
-    getOwnedTokens(CONTRACT_ADDRESS,COUNTER_CONTRACT_ABI,web3AuthProvider!,gaslessWallet?.getAddress()!,setPlayer1Chars,setTokenIds,setPlayer1)
-  };
+  if (!isInit) {
+    setDisplayOfBtn(false);
+    setIsLoading(true);
+    await initialized(setIsLoading, setGelatoLogin, setWeb3AuthProvider, provider, getGaslessWallet);
+    setIsInit(true);
+    setIsLoading(false);
+  }
+  setDisplayOfBtn(true);
+  // if (!gelatoLogin) {
+  //   return;
+  // }
+  setConnectText("Start Game");
+  const web3authProvider = await gelatoLogin!.login();
+  setWeb3AuthProvider(web3authProvider);
+  await getGaslessWallet(gelatoLogin, setGaslessWallet);
+  getOwnedTokens(CONTRACT_ADDRESS, COUNTER_CONTRACT_ABI, web3AuthProvider!, gaslessWallet?.getAddress()!, setPlayer1Chars, setTokenIds, setPlayer1);
+};
 
   const logout = async () => {
     if (!gelatoLogin) {
@@ -182,7 +186,15 @@ function App() {
       <div className="font-xbody flex justify-center h-max justify-self-center items-center flex-col">
       <h2 className="text-white font-bold text-4xl underline">Gelato Gasless Warriors</h2>
         <Main/>
+        {displayOfBtn && (
         <button onClick={login} className="py-2 px-4 border-dashed border-gray-400 border-4  tracking-widest text-white">{connectText}</button>
+        )}
+        {!displayOfBtn && (
+       <div>
+        <p className="text-white">Loading ... </p>
+       </div>
+        )}
+
         <br />
         <p className="text-white">Login to play the game</p>
       </div>
