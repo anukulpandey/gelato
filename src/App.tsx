@@ -19,6 +19,8 @@ import { getOwnedTokens } from "./utils/getOwnedTokens";
 import { burnNFT } from "./utils/burn";
 import AddressCard from "./components/AddressCard";
 import LogoutButton from "./components/Logout";
+import MyHeader from "./components/MyHeader";
+
 
 const CONTRACT_ADDRESS:string="0xA6D803e01a2e1920E49001738d0c29e7d35EA235";
 const COUNTER_CONTRACT_ABI = abi;
@@ -139,10 +141,16 @@ function App() {
     <div>
       {!transactionInProgress?
       <div>
-        <div className="flex px-6 justify-around">
-        <AddressCard walletAddress={`${gaslessWallet?.getAddress()}`} name={`${user?.name}`} email={`${user?.email}`}/>
-        <LogoutButton onPressed={logout}/>
-          </div>
+   <div className="flex flex-row">
+  <div className="flex justify-start px-10">
+    <AddressCard walletAddress={`${gaslessWallet?.getAddress()}`} name={`${user?.name}`} email={`${user?.email}`}/>
+  </div>
+  <div className="flex justify-end ml-auto px-4">
+    <LogoutButton onPressed={logout}/>
+  </div>
+</div>
+
+
       <div className="flex justify-evenly my-10">
       <div>
        <p className="border-b-2 my-2 border-gray-600 text-white"> Player-1 <span className="font-xbody uppercase text-l text-gray-400">[ {user?.name} ]</span> <button onClick={()=>refresh()}>🔄</button> </p>
@@ -190,10 +198,7 @@ function App() {
   const toLoginInView = (
     <div>
       <div className="font-xbody flex justify-center h-max justify-self-center items-center flex-col">
-        <div className="flex align-middle justify-center items-center">
-      <h2 className="text-white font-bold text-4xl underline">Gelato Gasless Warriors</h2>
-    <img src="/gelato.svg" alt="" className="w-28"/>
-        </div>
+       <MyHeader/>
         <Main/>
         {displayOfBtn && (
         <button onClick={login} className="py-2 px-4 border-dashed border-gray-400 border-4  tracking-widest text-white">{connectText}</button>
