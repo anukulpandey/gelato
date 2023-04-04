@@ -17,6 +17,7 @@ import abi from "./constants/contractAbi.json";
 import { mintNFT } from "./utils/mintNFT";
 import { getOwnedTokens } from "./utils/getOwnedTokens";
 import { burnNFT } from "./utils/burn";
+import AddressCard from "./components/AddressCard";
 
 const CONTRACT_ADDRESS:string="0xA6D803e01a2e1920E49001738d0c29e7d35EA235";
 const COUNTER_CONTRACT_ABI = abi;
@@ -148,8 +149,9 @@ function App() {
         </div>
         </div>
        {player1=="none"?<p className="text-white">
-        You need to refresh your characters by pressing 🔄
+        You need to refresh your characters by pressing <button onClick={()=>refresh()}>🔄</button>
        </p>: <button onClick={()=>{determineWinner(player1,player2,setStop,mint,burn,setTransactionInProgress,setAreYouWinningSon)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Fight</button> }
+
       </div>:
       
       areYouWinningSon?<div className="flex justify-evenly items-center px-24">
