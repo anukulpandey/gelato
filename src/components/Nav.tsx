@@ -1,7 +1,9 @@
 import React from 'react'
 
-export default function Navbar() {
+export default function Navbar(props:any) {
   return (
+    <div>
+
     <div className='flex m-2 font-xbody text-3xl my-5 justify-between text-white'>
       <ul className='flex space-x-3.5 '>
         <li className='flex px-3  '><img  className='w-5 h-5 self-center m-2' src="/social/email.png" alt="" /> <a href="mailto:anukul.030601@gmail.com"> email</a></li>
@@ -13,7 +15,10 @@ export default function Navbar() {
         <li className='flex px-3 '><img className='w-8 h-7  mx-1  self-center'  src="/nav/about.png" alt="" /> <a href=""> about</a></li>
         <li className='flex px-3 '><img  className='w-8 h-7  mx-1 self-center' src="/nav/contact.png" alt="" /> <a href="mailto:anukul.030601@gmail.com"> contact</a></li>
       </ul>
-      
+    </div>
+    <div className='flex justify-end px-6'>
+    {props.child}
+    </div>
     </div>
   )
 }

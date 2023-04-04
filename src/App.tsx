@@ -151,7 +151,6 @@ function App() {
        {player1=="none"?<p className="text-white">
         You need to refresh your characters by pressing <button onClick={()=>refresh()}>🔄</button>
        </p>: <button onClick={()=>{determineWinner(player1,player2,setStop,mint,burn,setTransactionInProgress,setAreYouWinningSon)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Fight</button> }
-        <AddressCard walletAddress={`${gaslessWallet?.getAddress()}`} name={`${user?.name}`} email={`${user?.email}`}/>
       </div>:
       
       areYouWinningSon?<div className="flex justify-evenly items-center px-24">
@@ -222,7 +221,7 @@ function App() {
 
   return (
     <>
-    <Navbar/>
+    <Navbar isLoggedIn={isDeployed} child={<AddressCard walletAddress={`${gaslessWallet?.getAddress()}`} name={`${user?.name}`} email={`${user?.email}`}/>}/>
       <div >
        {/* prod  */}
         {web3AuthProvider && isDeployed ?  loggedInView : web3AuthProvider? isFirstLogin :toLoginInView}
