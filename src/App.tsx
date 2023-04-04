@@ -141,16 +141,6 @@ function App() {
     <div>
       {!transactionInProgress?
       <div>
-   <div className="flex flex-row">
-  <div className="flex justify-start px-10">
-    <AddressCard walletAddress={`${gaslessWallet?.getAddress()}`} name={`${user?.name}`} email={`${user?.email}`}/>
-  </div>
-  <div className="flex justify-end ml-auto px-4">
-    <LogoutButton onPressed={logout}/>
-  </div>
-</div>
-
-
       <div className="flex justify-evenly my-10">
       <div>
        <p className="border-b-2 my-2 border-gray-600 text-white"> Player-1 <span className="font-xbody uppercase text-l text-gray-400">[ {user?.name} ]</span> <button onClick={()=>refresh()}>🔄</button> </p>
@@ -164,6 +154,14 @@ function App() {
        {player1=="none"?<p className="text-white">
         You need to refresh your characters by pressing <button onClick={()=>refresh()}>🔄</button>
        </p>: <button onClick={()=>{determineWinner(player1,player2,setStop,mint,burn,setTransactionInProgress,setAreYouWinningSon)}} className="py-2 px-3 border-dashed border-gray-400 border-2 text-white text-xs">Fight</button> }
+       <div className="flex flex-row">
+  <div className="flex justify-start px-10">
+    <AddressCard walletAddress={`${gaslessWallet?.getAddress()}`} name={`${user?.name}`} email={`${user?.email}`}/>
+  </div>
+  <div className="flex justify-end ml-auto px-4">
+    <LogoutButton onPressed={logout}/>
+  </div>
+</div>
       </div>:
       
       areYouWinningSon?<div className="flex justify-evenly items-center px-24">
