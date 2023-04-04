@@ -1,6 +1,7 @@
 import React from 'react'
+import LogoutButton from './Logout'
 
-export default function Navbar(props:any) {
+export default function Navbar() {
   return (
     <div>
 
@@ -15,9 +16,6 @@ export default function Navbar(props:any) {
         <li className='flex px-3 '><img className='w-8 h-7  mx-1  self-center'  src="/nav/about.png" alt="" /> <a href=""> about</a></li>
         <li className='flex px-3 '><img  className='w-8 h-7  mx-1 self-center' src="/nav/contact.png" alt="" /> <a href="mailto:anukul.030601@gmail.com"> contact</a></li>
       </ul>
-    </div>
-    <div className='flex justify-end px-6'>
-    {props.child}
     </div>
     </div>
   )

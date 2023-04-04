@@ -18,6 +18,7 @@ import { mintNFT } from "./utils/mintNFT";
 import { getOwnedTokens } from "./utils/getOwnedTokens";
 import { burnNFT } from "./utils/burn";
 import AddressCard from "./components/AddressCard";
+import LogoutButton from "./components/Logout";
 
 const CONTRACT_ADDRESS:string="0xA6D803e01a2e1920E49001738d0c29e7d35EA235";
 const COUNTER_CONTRACT_ABI = abi;
@@ -138,6 +139,10 @@ function App() {
     <div>
       {!transactionInProgress?
       <div>
+        <div className="flex px-6 justify-around">
+        <AddressCard walletAddress={`${gaslessWallet?.getAddress()}`} name={`${user?.name}`} email={`${user?.email}`}/>
+        <LogoutButton onPressed={logout}/>
+          </div>
       <div className="flex justify-evenly my-10">
       <div>
        <p className="border-b-2 my-2 border-gray-600 text-white"> Player-1 <span className="font-xbody uppercase text-l text-gray-400">[ {user?.name} ]</span> <button onClick={()=>refresh()}>🔄</button> </p>
@@ -221,7 +226,7 @@ function App() {
 
   return (
     <>
-    <Navbar isLoggedIn={isDeployed} child={<AddressCard walletAddress={`${gaslessWallet?.getAddress()}`} name={`${user?.name}`} email={`${user?.email}`}/>}/>
+    <Navbar/>
       <div >
        {/* prod  */}
         {web3AuthProvider && isDeployed ?  loggedInView : web3AuthProvider? isFirstLogin :toLoginInView}
